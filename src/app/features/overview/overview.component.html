@@ -42,9 +42,6 @@
         <ag-grid-angular
           [theme]="theme"
           class="grid-fill"
-          [loading]="store.isLoading() && store.candidates().length === 0"
-          [loadingOverlayComponent]="loadingOverlayComponent"
-          [loadingOverlayComponentParams]="loadingOverlayComponentParams"
           [rowData]="store.candidates()"
           [columnDefs]="columnDefs"
           [defaultColDef]="defaultColDef"
@@ -57,7 +54,6 @@
           (rowClicked)="onRowClicked($event)"
         />
       </div>
-
 
       @if (store.selectedCandidate(); as item) {
         <aside class="detail-sidebar">

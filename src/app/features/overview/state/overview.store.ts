@@ -23,7 +23,7 @@ export const OverviewStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store, scoutService = inject(ScoutService)) => ({
-    setSelectedCandidate(candidate: ScoutCandidate | null): void {
+    setSelectedCandidate(candidate: ScoutCandidate | null) {
       patchState(store, { selectedCandidate: candidate });
     },
 
