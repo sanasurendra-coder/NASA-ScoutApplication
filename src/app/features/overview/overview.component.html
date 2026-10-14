@@ -1,5 +1,4 @@
 <div class="overview-shell">
-  <!-- Compact Header Row -->
   <header class="overview-header">
     <div class="header-titles">
       <h1 class="title">NEO Candidate Tracking</h1>
@@ -11,7 +10,6 @@
       </p>
     </div>
 
-    <!-- Actions pulled to the right -->
     <div class="header-actions">
       <div class="search-wrapper">
         <input
@@ -32,7 +30,6 @@
     </div>
   </header>
 
-  <!-- Error Notification -->
   @if (store.error(); as error) {
     <div class="error-strip">
       <span>{{ error }}</span>
@@ -40,7 +37,6 @@
     </div>
   }
 
-  <!-- Main Grid Area - Fills remaining height with zero parent overflow -->
   <main class="grid-container">
     <ag-grid-angular
       [theme]="theme"
@@ -59,4 +55,80 @@
       (rowClicked)="onRowClicked($event)"
     />
   </main>
+
+
+  @if (store.selectedCandidate(); as candidate) {
+    <div class="drawer-backdrop" (click)="onCloseDrawer()">
+      <aside class="profile-drawer" (click)="$event.stopPropagation()">
+
+
+        <header class="drawer-header">
+          <div>
+            <div class="drawer-subtitle">Object Profile</div>
+            <h2 class="drawer-title">{{ candidate.objectName }}</h2>
+          </div>
+          <button class="close-btn" (click)="onCloseDrawer()" aria-label="Close profile">✕</button>
+        </header>
+
+        <div class="risk-badge" [ngClass]="{
+          'risk-elevated-badge': candidate.hazardAssessment === 'Elevated Alert',
+          'risk-monitored-badge': candidate.hazardAssessment === 'Monitored',
+          'risk-low-badge': candidate.hazardAssessment === 'Low Risk'
+        }">
+          Hazard Status: {{ candidate.hazardAssessment || 'Unassessed' }}
+        </div>
+
+        <div class="telemetry-grid">
+          <div class="telemetry-card">
+            <span class="telemetry-label">Observations Count</span>
+            <span class="telemetry-value">{{ candidate.nObs }}</span>
+          </div>
+
+          <div class="telemetry-card">
+            <span class="telemetry-label">Data Arc</span>
+            <span class="telemetry-value">{{ candidate.arc }} days</span>
+          </div>
+
+          <div class="telemetry-card">
+            <span class="telemetry-label">Absolute Magnitude (H)</span>
+            <span class="telemetry-value">{{ candidate.h }} mag</span>
+          </div>
+
+          <div class="telemetry-card">
+            <span class="telemetry-label">Close Approach Distance</span>
+            <span class="telemetry-value">{{ candidate.caDist ? candidate.caDist + ' LD' : 'N/A' }}</span>
+          </div>
+
+          <div class="telemetry-card">
+            <span class="telemetry-label">Encounter Velocity (V-Inf)</span>
+            <span class="telemetry-value">{{ candidate.vinf ? candidate.vinf + ' km/s' : 'N/A' }}</span>
+          </div>
+
+          <div class="telemetry-card">
+            <span class="telemetry-label">JPL Hazard Rating</span>
+            <span class="telemetry-value">{{ candidate.rating }} / 4</span>
+          </div>
+
+          <div class="telemetry-card">
+            <span class="telemetry-label">Impact Probability Score</span>
+            <span class="telemetry-value">{{ candidate.score }}%</span>
+          </div>
+
+          @if (candidate.phaFlag) {
+            <div class="telemetry-card">
+              <span class="telemetry-label">PHA Classification</span>
+              <span class="telemetry-value pha-flag">{{ candidate.phaFlag }}</span>
+            </div>
+          }
+        </div>
+
+        @if (candidate.lastRun) {
+          <footer class="drawer-footer">
+            <span>Last Trajectory Run: {{ candidate.lastRun }}</span>
+          </footer>
+        }
+
+      </aside>
+    </div>
+  }
 </div>

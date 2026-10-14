@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingIndicatorComponent } from './loading-indicator.component';
-import { DEFAULT_LOADING_MESSAGE } from '../../constants/loading-indicator.constants';
+import { DEFAULT_LOADING_MESSAGE } from '../../../core/constants/scout-constants';
 
 describe('LoadingIndicatorComponent', () => {
   let component: LoadingIndicatorComponent;
