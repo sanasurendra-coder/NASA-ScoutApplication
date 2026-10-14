@@ -23,6 +23,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
     FormsModule,
     AgGridAngular,
     DatePipe,
+    LoadingIndicatorComponent
   ],
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css']
