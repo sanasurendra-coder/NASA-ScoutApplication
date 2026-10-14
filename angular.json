@@ -13,7 +13,7 @@
         "@schematics/angular:component": {
           "type": "component"
         }
-        },
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -23,6 +23,7 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "polyfills": [],
             "assets": [
               {
                 "glob": "**/*",
@@ -30,13 +31,8 @@
               }
             ],
             "styles": ["src/styles.css"],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
             "security": {
               "allowedHosts": []
-            },
-            "ssr": {
-              "entry": "src/server.ts"
             }
           },
           "configurations": {
@@ -70,7 +66,8 @@
               "buildTarget": "nasa-application:build:production"
             },
             "development": {
-              "buildTarget": "nasa-application:build:development"
+              "buildTarget": "nasa-application:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
