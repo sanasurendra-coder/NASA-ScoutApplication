@@ -30,7 +30,6 @@
       </div>
     </header>
 
-    <!-- Error Alert Banner -->
     @if (store.error(); as error) {
       <div class="error-banner">
         <span>{{ error }}</span>
@@ -38,12 +37,14 @@
       </div>
     }
 
-    <!-- Main Workspace Area -->
     <div class="workspace-layout">
       <div class="grid-wrapper">
         <ag-grid-angular
           [theme]="theme"
           class="grid-fill"
+          [loading]="store.isLoading() && store.candidates().length === 0"
+          [loadingOverlayComponent]="loadingOverlayComponent"
+          [loadingOverlayComponentParams]="loadingOverlayComponentParams"
           [rowData]="store.candidates()"
           [columnDefs]="columnDefs"
           [defaultColDef]="defaultColDef"
@@ -57,7 +58,7 @@
         />
       </div>
 
-      <!-- Candidate Detail Sidebar -->
+
       @if (store.selectedCandidate(); as item) {
         <aside class="detail-sidebar">
           <div class="detail-header">
