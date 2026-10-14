@@ -1,8 +1,115 @@
-<section class="page-container">
-  <header class="page-header">
-    <h1>Scout NEO Candidates</h1>
-  </header>
-  <div class="card-placeholder">
-    <p>✅ overview route is active and rendering.</p>
+<div class="overview-container">
+  <div class="overview-content">
+
+    <header class="overview-header">
+      <div>
+        <h2 class="title">NEO Candidate Tracking</h2>
+        <p class="subtitle">
+          Current Near-Earth Object candidates under evaluation by the JPL Scout system
+          @if (store.lastUpdated()) {
+            <span> • Updated {{ store.lastUpdated() | date:'shortTime' }}</span>
+          }
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <input
+          type="text"
+          [(ngModel)]="quickFilterText"
+          (ngModelChange)="onQuickFilterChange()"
+          placeholder="Filter designations or risks..."
+          class="search-bar"
+        />
+        <button
+          class="refresh-button"
+          (click)="onRefresh()"
+          [disabled]="store.isLoading()"
+        >
+          {{ store.isLoading() ? 'Fetching Telemetry...' : 'Refresh Feed' }}
+        </button>
+      </div>
+    </header>
+
+    <!-- Error Alert Banner -->
+    @if (store.error(); as error) {
+      <div class="error-banner">
+        <span>{{ error }}</span>
+        <button class="retry-btn" (click)="onRefresh()">Retry</button>
+      </div>
+    }
+
+    <!-- Main Workspace Area -->
+    <div class="workspace-layout">
+      <div class="grid-wrapper">
+        <ag-grid-angular
+          [theme]="theme"
+          class="grid-fill"
+          [rowData]="store.candidates()"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [pagination]="true"
+          [paginationPageSize]="paginationPageSize"
+          [paginationPageSizeSelector]="paginationPageSizeSelector"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          (gridReady)="onGridReady($event)"
+          (rowClicked)="onRowClicked($event)"
+        />
+      </div>
+
+      <!-- Candidate Detail Sidebar -->
+      @if (store.selectedCandidate(); as item) {
+        <aside class="detail-sidebar">
+          <div class="detail-header">
+            <div>
+              <h3>Candidate {{ item.objectName }}</h3>
+              <span class="detail-badge" [ngClass]="{
+                'risk-elevated': item.hazardAssessment === 'Elevated Alert',
+                'risk-monitored': item.hazardAssessment === 'Monitored',
+                'risk-low': item.hazardAssessment === 'Low Risk'
+              }">{{ item.hazardAssessment }}</span>
+            </div>
+            <button class="close-btn" (click)="onCloseDrawer()">✕</button>
+          </div>
+
+          <div class="detail-content">
+            <div class="detail-row">
+              <span class="label">Observations Count</span>
+              <span class="value">{{ item.nObs }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Observed Data Arc</span>
+              <span class="value">{{ item.arc }} days</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Absolute Magnitude (H)</span>
+              <span class="value">{{ item.h }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Close-Approach Distance</span>
+              <span class="value">{{ item.caDist ? item.caDist + ' LD' : 'Uncomputed' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Relative Velocity (V∞)</span>
+              <span class="value">{{ item.vinf ? item.vinf + ' km/s' : 'Uncomputed' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Scout Hazard Rating</span>
+              <span class="value">{{ item.rating }} / 4</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Impact Probability Score</span>
+              <span class="value">{{ item.score }} / 100</span>
+            </div>
+            @if (item.phaFlag) {
+              <div class="detail-row">
+                <span class="label">PHA Flag</span>
+                <span class="value">{{ item.phaFlag }}</span>
+              </div>
+            }
+          </div>
+        </aside>
+      }
+    </div>
   </div>
-</section>
+</div>
