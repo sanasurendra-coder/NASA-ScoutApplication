@@ -42,7 +42,9 @@
         <ag-grid-angular
           [theme]="theme"
           class="grid-fill"
-          [rowData]="store.candidates()"
+          [loading]="store.isLoading()"
+          [loadingOverlayComponent]="loadingOverlayComponent"
+          [rowData]="store.isLoading() ? undefined : store.candidates()"
           [columnDefs]="columnDefs"
           [defaultColDef]="defaultColDef"
           [pagination]="true"
