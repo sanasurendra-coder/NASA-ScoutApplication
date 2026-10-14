@@ -11,7 +11,7 @@ import {
   CellClassParams,
   themeAlpine
 } from 'ag-grid-community';
-import { OverviewStore } from './state/overview.store';
+import { ScoutStore } from '../../core/scoutState/scout.store';
 import { ScoutCandidate } from '../../core/models/scout.model';
 import { LoadingIndicatorComponent } from '../../shared/components/loading-indicator/loading-indicator.component';
 
@@ -28,7 +28,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
-  readonly store = inject(OverviewStore);
+  readonly store = inject(ScoutStore);
   readonly theme = themeAlpine;
 
   quickFilterText = '';

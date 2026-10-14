@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ILoadingOverlayAngularComp } from 'ag-grid-angular';
 import { ILoadingOverlayParams } from 'ag-grid-community';
-import { DEFAULT_LOADING_MESSAGE } from '../../constants/loading-indicator.constants';
+import { DEFAULT_LOADING_MESSAGE } from '../../../core/constants/scout-constants';
 
 @Component({
   selector: 'app-loading-indicator',
