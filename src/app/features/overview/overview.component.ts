@@ -13,12 +13,18 @@ import {
 } from 'ag-grid-community';
 import { OverviewStore } from './state/overview.store';
 import { ScoutCandidate } from '../../core/models/scout.model';
-
+import { LoadingIndicatorComponent } from '../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, FormsModule, AgGridAngular, DatePipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AgGridAngular,
+    DatePipe,
+    LoadingIndicatorComponent
+  ],
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css']
 })
@@ -31,34 +37,19 @@ export class OverviewComponent implements OnInit {
 
   readonly rowHeight = 48;
   readonly headerHeight = 44;
-
   readonly paginationPageSize = 10;
   readonly paginationPageSizeSelector = [10, 20, 50];
 
+  readonly loadingOverlayComponent = LoadingIndicatorComponent;
+  readonly loadingOverlayComponentParams = {
+    message: 'Loading candidate data...'
+  };
+
   readonly columnDefs: ColDef<ScoutCandidate>[] = [
-    {
-      field: 'objectName',
-      headerName: 'Designation',
-      filter: 'agTextColumnFilter',
-      width: 140
-    },
-    {
-      field: 'nObs',
-      headerName: 'Observations',
-      filter: 'agNumberColumnFilter',
-      width: 140
-    },
-    {
-      field: 'arc',
-      headerName: 'Data Arc (Days)',
-      width: 140
-    },
-    {
-      field: 'h',
-      headerName: 'Abs Mag (H)',
-      filter: 'agNumberColumnFilter',
-      width: 130
-    },
+    { field: 'objectName', headerName: 'Designation', filter: 'agTextColumnFilter', width: 140 },
+    { field: 'nObs', headerName: 'Observations', filter: 'agNumberColumnFilter', width: 140 },
+    { field: 'arc', headerName: 'Data Arc (Days)', width: 140 },
+    { field: 'h', headerName: 'Abs Mag (H)', filter: 'agNumberColumnFilter', width: 130 },
     {
       field: 'caDist',
       headerName: 'Close Approach (LD)',
@@ -98,7 +89,9 @@ export class OverviewComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
-    params.api.sizeColumnsToFit();
+    setTimeout(() => {
+      params.api.sizeColumnsToFit();
+    }, 0);
   }
 
   onQuickFilterChange(): void {

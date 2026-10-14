@@ -30,7 +30,6 @@
       </div>
     </header>
 
-    <!-- Error Alert Banner -->
     @if (store.error(); as error) {
       <div class="error-banner">
         <span>{{ error }}</span>
@@ -38,7 +37,6 @@
       </div>
     }
 
-    <!-- Main Workspace Area -->
     <div class="workspace-layout">
       <div class="grid-wrapper">
         <ag-grid-angular
@@ -57,7 +55,6 @@
         />
       </div>
 
-      <!-- Candidate Detail Sidebar -->
       @if (store.selectedCandidate(); as item) {
         <aside class="detail-sidebar">
           <div class="detail-header">
