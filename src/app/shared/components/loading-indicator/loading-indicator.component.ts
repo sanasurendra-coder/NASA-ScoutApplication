@@ -14,7 +14,6 @@ export class LoadingIndicatorComponent implements ILoadingOverlayAngularComp {
   @Input() cancellable: boolean = false;
   @Output() cancelled = new EventEmitter<void>();
 
-  // Required by AG Grid Angular component wrapper as it is a pure vanila js
   agInit(_params: ILoadingOverlayParams): void {}
 
   onCancel(): void {
