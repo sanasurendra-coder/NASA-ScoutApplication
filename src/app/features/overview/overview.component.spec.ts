@@ -3,7 +3,7 @@ import { signal } from '@angular/core';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { OverviewComponent } from './overview.component';
-import { OverviewStore } from './state/overview.store';
+import { ScoutStore } from '../../core/scoutState/scout.store';
 import { ScoutCandidate } from '../../core/models/scout.model';
 
 // Register AG Grid Community modules in the test runner
@@ -37,7 +37,7 @@ describe('OverviewComponent', () => {
     await TestBed.configureTestingModule({
       imports: [OverviewComponent],
       providers: [
-        { provide: OverviewStore, useValue: mockStore }
+        { provide: ScoutStore, useValue: mockStore }
       ]
     }).compileComponents();
 

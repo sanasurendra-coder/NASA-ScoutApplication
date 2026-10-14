@@ -3,8 +3,8 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'overview'
+    redirectTo: 'overview',
+    pathMatch: 'full'
   },
   {
     path: 'overview',
