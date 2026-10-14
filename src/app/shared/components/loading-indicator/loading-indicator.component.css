@@ -1,0 +1,50 @@
+:host {
+  display: inline-block;
+}
+
+.loading-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-text {
+  font-size: 0.875rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.cancel-btn {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #cbd5e1;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.15s ease;
+}
+
+.cancel-btn:hover {
+  background: #f1f5f9;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

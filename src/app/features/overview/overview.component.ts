@@ -23,7 +23,6 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
     FormsModule,
     AgGridAngular,
     DatePipe,
-    LoadingIndicatorComponent
   ],
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css']
@@ -41,9 +40,6 @@ export class OverviewComponent implements OnInit {
   readonly paginationPageSizeSelector = [10, 20, 50];
 
   readonly loadingOverlayComponent = LoadingIndicatorComponent;
-  readonly loadingOverlayComponentParams = {
-    message: 'Loading candidate data...'
-  };
 
   readonly columnDefs: ColDef<ScoutCandidate>[] = [
     { field: 'objectName', headerName: 'Designation', filter: 'agTextColumnFilter', width: 140 },
