@@ -1,7 +1,7 @@
 :host {
   display: block;
   width: 100%;
-  overflow-y: visible; /* Prevents the inner second scrollbar */
+  overflow-y: visible;
   background-color: #fafafa;
   color: #171717;
   box-sizing: border-box;
@@ -10,7 +10,7 @@
 .contact-wrapper {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 3rem 2rem 5rem 2rem; /* Keep bottom padding so button clears cleanly */
+  padding: 3rem 2rem 5rem 2rem;
   box-sizing: border-box;
 }
 

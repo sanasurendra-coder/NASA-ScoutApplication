@@ -1,8 +1,11 @@
 import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { inject } from '@angular/core';
+import { pipe, switchMap, tap, catchError, of } from 'rxjs';
 import { ScoutService } from '../services/scout.service';
 import { ScoutCandidate, ContactInquiry, SubmissionStatus } from '../models/scout.model';
-import { CONTACT_FORM_CONFIG } from '../constants/scout-constants';
+import { AppApiError } from '../models/api-error.model';
+import { CONTACT_FORM_CONFIG, APP_MESSAGES } from '../constants/scout-constants';
 
 export interface ScoutState {
   candidates: ScoutCandidate[];
@@ -34,25 +37,29 @@ export const ScoutStore = signalStore(
       patchState(store, { selectedCandidate: candidate });
     },
 
-    loadCandidates(): void {
-      patchState(store, { isLoading: true, error: null });
-
-      scoutService.getCandidates().subscribe({
-        next: (data) => {
-          patchState(store, {
-            candidates: data,
-            isLoading: false,
-            lastUpdated: new Date()
-          });
-        },
-        error: (err) => {
-          patchState(store, {
-            error: err?.message || 'Failed to retrieve orbital data from NASA.',
-            isLoading: false
-          });
-        }
-      });
-    },
+    loadCandidates: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null })),
+        switchMap(() =>
+          scoutService.getCandidates().pipe(
+            tap((candidates) => {
+              patchState(store, {
+                candidates, // <-- passed directly without .data
+                isLoading: false,
+                lastUpdated: new Date()
+              });
+            }),
+            catchError((err: AppApiError) => {
+              patchState(store, {
+                error: err?.message || APP_MESSAGES.ERRORS.GENERIC_FALLBACK,
+                isLoading: false
+              });
+              return of(null);
+            })
+          )
+        )
+      )
+    ),
 
     async submitInquiry(inquiry: ContactInquiry): Promise<boolean> {
       patchState(store, { contactStatus: 'submitting', contactError: null });
@@ -70,10 +77,11 @@ export const ScoutStore = signalStore(
           contactError: null
         });
         return true;
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const fallbackMessage = err instanceof Error ? err.message : CONTACT_FORM_CONFIG.GENERIC_FAILURE;
         patchState(store, {
           contactStatus: 'error',
-          contactError: err?.message || CONTACT_FORM_CONFIG.GENERIC_FAILURE
+          contactError: fallbackMessage
         });
         return false;
       }

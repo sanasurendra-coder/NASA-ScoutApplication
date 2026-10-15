@@ -5,7 +5,7 @@
 .sidebar-container {
   width: 280px;
   height: 100vh;
-  background-color: #f1f3f7; /* Soft neutral backdrop */
+  background-color: #f1f3f7;
   border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
@@ -38,14 +38,14 @@
   color: #1e293b;
 }
 
-/* Floating Card Shell (Matches 1 & 2 in the mockup) */
+
 .menu-card {
   background-color: #f8f9fc;
   border: 1px solid #e5e7eb;
-  border-radius: 20px; /* Distinct rounded corners */
+  border-radius: 20px;
   padding: 0.75rem;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05),
-  0 8px 10px -6px rgba(0, 0, 0, 0.04); /* Soft floating drop shadow */
+  0 8px 10px -6px rgba(0, 0, 0, 0.04);
 }
 
 .menu-list {
@@ -54,7 +54,6 @@
   gap: 0.35rem;
 }
 
-/* Default Menu Item State */
 .menu-item {
   display: flex;
   align-items: center;
@@ -83,18 +82,8 @@
   flex: 1;
 }
 
-/* Active Highlight Pill */
-/* If you want the exact lilac tone from the image: */
 .menu-item.active {
-  background-color: #f3bcfc; /* Lilac selection pill */
-  color: #3b0764; /* Deep contrasting violet text */
+  background-color: #f3bcfc;
+  color: #3b0764;
   font-weight: 600;
 }
-
-/* Alternative: If you prefer an executive neutral active pill instead:
-.menu-item.active {
-  background-color: #e2e8f0;
-  color: #0f172a;
-  font-weight: 600;
-}
-*/
