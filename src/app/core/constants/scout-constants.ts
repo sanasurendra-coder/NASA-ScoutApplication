@@ -73,3 +73,20 @@ export const CONTACT_FORM_CONFIG = {
 } as const;
 
 export const DEFAULT_LOADING_MESSAGE = 'Loading candidate data';
+
+export const APP_MESSAGES = {
+  ERRORS: {
+    NETWORK_OFFLINE: "We can't connect right now. Please check your internet connection.",
+    UNAUTHORIZED: 'Your session has timed out. Please sign in again to continue.',
+    FORBIDDEN: "You don't have access to this section. Contact your administrator if you need permission.",
+    NOT_FOUND: "We couldn't find the record or page you were looking for.",
+    SERVER_DOWN: 'Our systems are experiencing a brief hiccup. Please try again in a few moments.',
+    GENERIC_FALLBACK: 'Something went wrong on our end. Please try again later.',
+    TELEMETRY_SYNC: 'Unable to retrieve the latest asteroid tracking data. Showing last known state.',
+    INQUIRY_DISPATCH: "We couldn't deliver your message. Please give it another try in a moment."
+  },
+  INFO: {
+    LOADING_DATA: 'Loading candidate data',
+    FETCHING_FEED: 'Updating feed'
+  }
+} as const;

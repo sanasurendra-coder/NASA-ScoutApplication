@@ -1,35 +1,59 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
-import { ScoutApiResponse, ScoutCandidate } from '../models/scout.model';
-import {environment} from '../../../environment/environment';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Observable, catchError, map } from 'rxjs';
+import { ScoutCandidate, ContactInquiry } from '../models/scout.model';
+import { AppApiError } from '../models/api-error.model';
+import { BYPASS_AUTH } from '../interceptors/http-context.tokens';
+import { enrichError } from '../utils/error-handler.util';
+import { APP_MESSAGES } from '../constants/scout-constants';
+
+interface NasaJplResponse {
+  count: number;
+  fields?: string[];
+  data: any[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScoutService {
   private readonly http = inject(HttpClient);
-  private readonly scoutUrl = `${environment.nasaScoutApiBaseUrl}${API_ENDPOINTS.SCOUT}`;
+  private readonly baseUrl = '/api-scout';
 
   getCandidates(): Observable<ScoutCandidate[]> {
-    return this.http.get<ScoutApiResponse>(this.scoutUrl).pipe(
-      map(response =>
-        (response.data || []).map(candidate => ({
-          ...candidate,
-          hazardAssessment: this.calculateRisk(Number(candidate.rating), Number(candidate.score))
-        }))
-      )
-    );
+    return this.http
+      .get<NasaJplResponse>(`${this.baseUrl}/scout.api`, {
+        context: new HttpContext().set(BYPASS_AUTH, true)
+      })
+      .pipe(
+        map((response) => {
+          if (!response?.data) {
+            return [];
+          }
+
+          if (response.fields && Array.isArray(response.data[0])) {
+            return response.data.map((row: any[]) => {
+              const record: Record<string, any> = {};
+              response.fields!.forEach((field, index) => {
+                record[field] = row[index];
+              });
+              return record as ScoutCandidate;
+            });
+          }
+
+          return response.data as ScoutCandidate[];
+        }),
+        catchError((error: AppApiError) =>
+          enrichError(error, APP_MESSAGES.ERRORS.TELEMETRY_SYNC)
+        )
+      );
   }
 
-  private calculateRisk(rating: number, score: number): 'Low Risk' | 'Monitored' | 'Elevated Alert' {
-    if (rating >= 3 || score >= 50) {
-      return 'Elevated Alert';
-    }
-    if (rating >= 1 || score > 0) {
-      return 'Monitored';
-    }
-    return 'Low Risk';
+  submitContactInquiry(payload: ContactInquiry): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>('/api/contact', payload).pipe(
+      catchError((error: AppApiError) =>
+        enrichError(error, APP_MESSAGES.ERRORS.INQUIRY_DISPATCH)
+      )
+    );
   }
 }

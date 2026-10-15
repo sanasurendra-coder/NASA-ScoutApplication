@@ -6,7 +6,6 @@ import { OverviewComponent } from './overview.component';
 import { ScoutStore } from '../../core/scoutState/scout.store';
 import { ScoutCandidate } from '../../core/models/scout.model';
 
-// Register AG Grid Community modules in the test runner
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 describe('OverviewComponent', () => {
